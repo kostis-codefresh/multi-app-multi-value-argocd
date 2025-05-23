@@ -9,5 +9,5 @@ argocd login host.docker.internal:8080 --insecure --username "$ARGOUSER" --passw
 kubeconfigDir=$(find /hack -name "kubeconfig" -print -quit)
 for kc in "$kubeconfigDir"/*; do
   cluster=$(basename "$kc" .yaml)
-  argocd cluster add -y --upsert --kubeconfig "$kc" "k3d-$cluster" --insecure --name "$cluster"
+  argocd cluster add -y --upsert --kubeconfig "$kc" "k3d-$cluster" --insecure --name "$cluster" --label demo=more
 done
