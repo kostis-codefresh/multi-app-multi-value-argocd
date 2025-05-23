@@ -7,14 +7,17 @@ spec:
   goTemplate: true
   goTemplateOptions: ["missingkey=error"]
   generators:
-  - git:
-      repoURL: https://github.com/kostis-codefresh/multi-app-multi-value-argocd.git
-      revision: HEAD
-      directories:
-      - path: kustomize-apps/*/envs/qa   
+  - matrix:
+      generators:
+        - git:
+            repoURL: https://github.com/kostis-codefresh/multi-app-multi-value-argocd.git
+            revision: HEAD
+            directories:
+            - path: kustomize-apps/*/envs/qa   
+        - clusters: {}    
   template:      
     metadata:
-      name: '{{index .path.segments 1}}-{{index .path.segments 3}}'     
+      name: '{{index .path.segments 1}}-{{index .path.segments 3}}-{{.name}}'     
     spec:
       # The project the application belongs to.
       project: default
@@ -27,7 +30,7 @@ spec:
       
       # Destination cluster and namespace to deploy the application
       destination:
-        server: https://kubernetes.default.svc
+        server: '{{.server}}'
         namespace: '{{index .path.segments 1}}-{{index .path.segments 3}}'
 
       # Sync policy
