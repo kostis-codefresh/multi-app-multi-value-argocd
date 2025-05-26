@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: my-qa-appset
+  name: 03-eu-only-appset
   namespace: argocd
 spec:
   goTemplate: true
@@ -13,14 +13,15 @@ spec:
             repoURL: https://github.com/kostis-codefresh/multi-app-multi-value-argocd.git
             revision: HEAD
             directories:
-            - path: kustomize-apps/*/envs/qa   
+            - path: common-apps/*
         - clusters:    
             selector:
               matchLabels:
-                env-type: "prod"        
+                type: "workload"     
+                region: "eu"                     
   template:      
     metadata:
-      name: '{{index .path.segments 1}}-{{index .path.segments 3}}-{{.name}}'     
+      name: 'eu-only-{{index .path.segments 1}}-{{.name}}'     
     spec:
       # The project the application belongs to.
       project: default
@@ -34,7 +35,7 @@ spec:
       # Destination cluster and namespace to deploy the application
       destination:
         server: '{{.server}}'
-        namespace: '{{index .path.segments 1}}-{{index .path.segments 3}}'
+        namespace: 'eu-only-{{index .path.segments 1}}'
 
       # Sync policy
       syncPolicy:

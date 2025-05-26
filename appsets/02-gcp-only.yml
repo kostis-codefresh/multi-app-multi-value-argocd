@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: my-common-appset
+  name: 02-gcp-only-appset
   namespace: argocd
 spec:
   goTemplate: true
@@ -17,10 +17,11 @@ spec:
         - clusters:    
             selector:
               matchLabels:
-                type: "workload"        
+                type: "workload"     
+                cloud: "gcp"                     
   template:      
     metadata:
-      name: '{{index .path.segments 1}}-{{.name}}'     
+      name: 'gcp-only-{{index .path.segments 1}}-{{.name}}'     
     spec:
       # The project the application belongs to.
       project: default
@@ -34,7 +35,7 @@ spec:
       # Destination cluster and namespace to deploy the application
       destination:
         server: '{{.server}}'
-        namespace: '{{index .path.segments 1}}'
+        namespace: 'gcp-only-{{index .path.segments 1}}'
 
       # Sync policy
       syncPolicy:

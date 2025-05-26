@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: my-specific-cluster-appset
+  name: 04-specific-cluster-appsets
   namespace: argocd
 spec:
   goTemplate: true
@@ -18,11 +18,11 @@ spec:
             selector:
               matchLabels:
                 type: "workload"  
-                region: "us"     
+                region: "asia"     
                 env: "prod"           
   template:      
     metadata:
-      name: 'demo-{{index .path.segments 1}}-{{.name}}'     
+      name: 'single-cluster-{{index .path.segments 1}}-{{.name}}'     
     spec:
       # The project the application belongs to.
       project: default
@@ -36,7 +36,7 @@ spec:
       # Destination cluster and namespace to deploy the application
       destination:
         server: '{{.server}}'
-        namespace: 'demo-{{index .path.segments 1}}'
+        namespace: 'single-cluster-{{index .path.segments 1}}'
 
       # Sync policy
       syncPolicy:
