@@ -2,10 +2,6 @@
 set -e
 set -o pipefail
 
-prompt() {
-  echo "Press any key to continue... "
-  read -r
-}
 
 precheck() {
     which docker > /dev/null || { echo "docker not installed or not on path"; exit; }
@@ -45,15 +41,17 @@ deployArgoCD() {
   argocd login ${argo_host} \
     --username admin \
     --password "${initial_password}" \
-    --insecure
+    --insecure || true
   argocd account update-password \
     --account admin \
     --current-password "${initial_password}" \
-    --new-password admin1234
+    --new-password admin1234 || true
 
  echo "Access the UI at: http://localhost:$port with user: admin and password: admin1234"
 }
 
 addClustersToArgoCD() {
+  echo "Adding clusters to ArgoCD..."
+
   ARGOUSER="admin" ARGOPASSWD="admin1234" docker run --network localclusters --rm -e ARGOUSER -e ARGOPASSWD -v "$(pwd)/container:/hack" quay.io/argoproj/argocd:latest /hack/addClusters.sh
 }
