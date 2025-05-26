@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: my-qa-appset
+  name: 05-my-qa-appset
   namespace: argocd
 spec:
   goTemplate: true
@@ -17,10 +17,11 @@ spec:
         - clusters:    
             selector:
               matchLabels:
-                env-type: "prod"        
+                type: "workload"     
+                env: "qa"         
   template:      
     metadata:
-      name: '{{index .path.segments 1}}-{{index .path.segments 3}}-{{.name}}'     
+      name: '{{index .path.segments 1}}-{{.name}}'     
     spec:
       # The project the application belongs to.
       project: default
