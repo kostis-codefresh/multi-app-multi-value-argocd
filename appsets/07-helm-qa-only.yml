@@ -1,34 +1,51 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: my-staging-appset
+  name: 07-helm-qa-only
   namespace: argocd
 spec:
   goTemplate: true
   goTemplateOptions: ["missingkey=error"]
   generators:
-  - git:
-      repoURL: https://github.com/kostis-codefresh/multi-app-multi-value-argocd.git
-      revision: HEAD
-      directories:
-      - path: kustomize-apps/*/envs/staging    
+  - matrix:
+      generators:
+        - git:
+            repoURL: https://github.com/kostis-codefresh/multi-app-multi-value-argocd.git
+            revision: HEAD
+            directories:
+            - path: charts/*
+        - clusters:    
+            selector:
+              matchLabels:
+                type: "workload"     
+                env: "qa"         
   template:      
     metadata:
-      name: '{{index .path.segments 1}}-{{index .path.segments 3}}' 
+      name: '{{index .path.segments 1}}-{{.name}}'     
     spec:
       # The project the application belongs to.
       project: default
 
       # Source of the application manifests
-      source:
-        repoURL: https://github.com/kostis-codefresh/multi-app-multi-value-argocd.git
-        targetRevision: HEAD
-        path: '{{.path.path}}'
+      sources:
+        - repoURL: https://github.com/kostis-codefresh/multi-app-multi-value-argocd.git
+          path: '{{.path.path}}'
+          targetRevision: HEAD
+          helm:
+            valueFiles:
+            - '$my-values/values/{{index .path.segments 1}}/common-values.yaml'  
+            - '$my-values/values/{{index .path.segments 1}}/app-version/qa-values.yaml'               
+            - '$my-values/values/{{index .path.segments 1}}/env-type/non-prod-values.yaml'  
+            - '$my-values/values/{{index .path.segments 1}}/envs/qa-values.yaml'                   
+        - repoURL: 'https://github.com/kostis-codefresh/multi-app-multi-value-argocd.git'
+          targetRevision: HEAD
+          ref: my-values
+
       
       # Destination cluster and namespace to deploy the application
       destination:
-        server: https://kubernetes.default.svc
-        namespace: '{{index .path.segments 1}}-{{index .path.segments 3}}'
+        server: '{{.server}}'
+        namespace: '{{index .path.segments 1}}'
 
       # Sync policy
       syncPolicy:
