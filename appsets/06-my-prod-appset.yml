@@ -1,18 +1,32 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: my-prod-appset
+  name: 06-my-prod-appset
   namespace: argocd
 spec:
   goTemplate: true
   goTemplateOptions: ["missingkey=error"]
   generators:
-  - git:
-      repoURL: https://github.com/kostis-codefresh/multi-app-multi-value-argocd.git
-      revision: HEAD
-      directories:
-      - path: kustomize-apps/*/envs/prod-us
-      - path: kustomize-apps/*/envs/prod-eu      
+  - matrix:
+      generators:
+        - clusters:    
+            selector:
+              matchLabels:
+                type: "workload"      
+                env: "prod" 
+              matchExpressions:
+              - key: region
+                operator: In
+                values:
+                  - "eu"
+                  - "us"         
+        - git:
+            repoURL: https://github.com/kostis-codefresh/multi-app-multi-value-argocd.git
+            revision: HEAD
+            directories:
+            - path: 'kustomize-apps/*/envs/{{.name}}'
+
+                           
   template:      
     metadata:
       name: '{{index .path.segments 1}}-{{index .path.segments 3}}' 
@@ -24,11 +38,11 @@ spec:
       source:
         repoURL: https://github.com/kostis-codefresh/multi-app-multi-value-argocd.git
         targetRevision: HEAD
-        path: '{{.path.path}}'
+        path: 'kustomize-apps/{{index .path.segments 1}}/envs/{{index .path.segments 3}}'
       
       # Destination cluster and namespace to deploy the application
       destination:
-        server: https://kubernetes.default.svc
+        server: '{{.server}}'
         namespace: '{{index .path.segments 1}}-{{index .path.segments 3}}'
 
       # Sync policy
