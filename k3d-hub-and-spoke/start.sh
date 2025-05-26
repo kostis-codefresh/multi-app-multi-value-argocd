@@ -31,7 +31,7 @@ echo "Setting labels on clusters..."
 argocd login localhost:8080 --username admin --password admin1234 --insecure 
 argocd cluster set qa-us --label "type=workload" --label "cloud=gcp" --label "env=qa" --label "region=us"
 argocd cluster set qa-eu --label "type=workload" --label "cloud=gcp" --label "env=qa" --label "region=eu"
-argocd cluster set staging --label "type=workload" --label "cloud=gcp" --label "env=staging" --label "env=prod" --label "region=us"
+argocd cluster set staging --label "type=workload" --label "cloud=gcp" --label "env=staging" --label "env=staging" --label "region=us"
 argocd cluster set prod-us --label "type=workload" --label "cloud=aws" --label "env=prod" --label "env=prod" --label "region=us"
 argocd cluster set prod-eu --label "type=workload" --label "cloud=aws" --label "env=prod" --label "env=prod" --label "region=eu"
 argocd cluster set prod-asia --label "type=workload" --label "cloud=aws" --label "env=prod" --label "env=prod" --label "region=asia"
