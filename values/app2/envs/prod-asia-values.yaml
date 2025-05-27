@@ -2,7 +2,7 @@
 replicaCount: 3
 
 # Environment settings
-environment: staging-asia
+environment: prod-asia
 
 # Application settings
 userInterfaceTheme: "dark"
