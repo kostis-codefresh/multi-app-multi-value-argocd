@@ -2,7 +2,7 @@
 replicaCount: 3
 
 # Environment settings
-environment: staging-us
+environment: qa-us
 
 # Application settings
 userInterfaceTheme: "light"

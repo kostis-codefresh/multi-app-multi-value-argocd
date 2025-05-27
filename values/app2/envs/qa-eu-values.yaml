@@ -2,7 +2,7 @@
 replicaCount: 3
 
 # Environment settings
-environment: staging-eu
+environment: qa-eu
 
 # Application settings
 userInterfaceTheme: "dark"

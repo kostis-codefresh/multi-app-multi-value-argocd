@@ -1,10 +1,10 @@
 # Environment settings
-environment: integration-gpu
+environment: staging
 
 # Application settings
-userInterfaceTheme: "light"
+userInterfaceTheme: "dark"
 cacheSize: "1024kb"
 gpuEnabled: "1"
-pageLimit: "50"
-sorting: "Ascending"
+pageLimit: "25"
+sorting: "ascending"
 nBuckets: "42"

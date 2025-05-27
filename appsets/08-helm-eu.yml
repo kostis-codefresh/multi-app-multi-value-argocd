@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: 08-helm-prod
+  name: 08-helm-eu
   namespace: argocd
 spec:
   goTemplate: true
@@ -13,14 +13,7 @@ spec:
             selector:
               matchLabels:
                 type: "workload"      
-                env: "prod" 
-              matchExpressions:
-              - key: region
-                operator: In
-                values:
-                  - "eu"
-                  - "us"   
-                  - "asia"                       
+                region: "eu"                        
         - git:
             repoURL: https://github.com/kostis-codefresh/multi-app-multi-value-argocd.git
             revision: HEAD
@@ -41,10 +34,9 @@ spec:
           helm:
             valueFiles:
             - '$my-values/values/{{index .path.segments 1}}/common-values.yaml'  
-            - '$my-values/values/{{index .path.segments 1}}/app-version/{{index .metadata.labels "env"}}-values.yaml'               
-            - '$my-values/values/{{index .path.segments 1}}/env-type/{{index .metadata.labels "env"}}-values.yaml'  
-            - '$my-values/values/{{index .path.segments 1}}/regions/{{index .metadata.labels "region"}}-values.yaml'              
-            - '$my-values/values/{{index .path.segments 1}}/envs/{{index .metadata.labels "env"}}-{{index .metadata.labels "region"}}-values.yaml'                   
+            - '$my-values/values/{{index .path.segments 1}}/app-version/{{index .metadata.labels "env"}}-values.yaml'                 
+            - '$my-values/values/{{index .path.segments 1}}/regions/eu-values.yaml'              
+            - '$my-values/values/{{index .path.segments 1}}/envs/{{index .metadata.labels "env"}}-eu-values.yaml'                   
         - repoURL: 'https://github.com/kostis-codefresh/multi-app-multi-value-argocd.git'
           targetRevision: HEAD
           ref: my-values
