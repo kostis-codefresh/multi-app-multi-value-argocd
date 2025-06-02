@@ -13,7 +13,7 @@ spec:
             repoURL: https://github.com/kostis-codefresh/multi-app-multi-value-argocd.git
             revision: HEAD
             directories:
-            - path: common-apps/*
+            - path: simple-apps/*
         - clusters:    
             selector:
               matchLabels:
