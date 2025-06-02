@@ -35,8 +35,7 @@ spec:
             valueFiles:
             - '$my-values/values/{{index .path.segments 1}}/common-values.yaml'  
             - '$my-values/values/{{index .path.segments 1}}/app-version/qa-values.yaml'               
-            - '$my-values/values/{{index .path.segments 1}}/env-type/non-prod-values.yaml'  
-            - '$my-values/values/{{index .path.segments 1}}/envs/qa-values.yaml'                   
+            - '$my-values/values/{{index .path.segments 1}}/env-type/non-prod-values.yaml'                     
         - repoURL: 'https://github.com/kostis-codefresh/multi-app-multi-value-argocd.git'
           targetRevision: HEAD
           ref: my-values
