@@ -3,7 +3,9 @@
 In a large organization, you don’t really care about individual clusters. You care about cluster groups. Argo CD doesn’t model the concept of a cluster group on its own, but you can replicate it using cluster labels.
 
 You need to spend some time thinking about the different types of clusters you have and then assign labels to them.
-Tagged clusters
+
+![Tagged clusters](docs/tagged-cluster.png)
+
 
 The labels can be anything that makes sense to your organization
 
@@ -27,6 +29,8 @@ Because, ultimately, 99% of use cases resolve around cluster groups rather than 
 We’ll see in detail all the advantages when using cluster labels, but one of the easiest ways to understand the flexibility of this approach is to examine what happens for a very common scenario—adding a brand new cluster.
 
 In most cases, a new cluster is “similar” to another cluster. A human operator needs to “clone” an existing cluster, or at the very least, define the new properties of the new cluster in the configuration file.
+
+![Adding a new cluster](docs/new-cluster.png)
 
 If you use cluster labels (as we suggest), the whole process requires zero modifications to your application set files.
 
